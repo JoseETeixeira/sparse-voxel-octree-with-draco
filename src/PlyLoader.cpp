@@ -81,8 +81,109 @@ const std::string getAssetPath()
 #endif
 }
 
-PlyLoader::PlyLoader(const char *path) : _isBigEndian(false), _lower(1e30f), _upper(-1e30f) {
+void PlyLoader::dracoToPly(const char *path){
+    std::string input = getAssetPath() + path+ ".drc";
+    std::string output = getAssetPath() + path + ".ply";
 
+
+    Options options;
+    options.input = input;
+    options.output = output;
+    options.is_point_cloud = true;
+
+    std::vector<char> data;
+    if (!draco::ReadFileToBuffer(options.input, &data)) {
+        printf("Failed opening the input file.\n");
+    }
+
+    if (data.empty()) {
+        printf("Empty input file.\n");
+    }
+
+    // Create a draco decoding buffer. Note that no data is copied in this step.
+    draco::DecoderBuffer buffer;
+    buffer.Init(data.data(), data.size());
+
+    draco::CycleTimer timer;
+    // Decode the input data into a geometry.
+    std::unique_ptr<draco::PointCloud> pc;
+    draco::Mesh *mesh = nullptr;
+    auto type_statusor = draco::Decoder::GetEncodedGeometryType(&buffer);
+    if (!type_statusor.ok()) {
+        printf("type status error");
+    }
+    const draco::EncodedGeometryType geom_type = type_statusor.value();
+    if (geom_type == draco::TRIANGULAR_MESH) {
+        timer.Start();
+        draco::Decoder decoder;
+        auto statusor = decoder.DecodeMeshFromBuffer(&buffer);
+        if (!statusor.ok()) {
+         printf("status error");
+        }
+        std::unique_ptr<draco::Mesh> in_mesh = std::move(statusor).value();
+        timer.Stop();
+        if (in_mesh) {
+        mesh = in_mesh.get();
+        pc = std::move(in_mesh);
+        }
+    } else if (geom_type == draco::POINT_CLOUD) {
+        // Failed to decode it as mesh, so let's try to decode it as a point cloud.
+        timer.Start();
+        draco::Decoder decoder;
+        auto statusor = decoder.DecodePointCloudFromBuffer(&buffer);
+        if (!statusor.ok()) {
+        printf("status error");
+        }
+        pc = std::move(statusor).value();
+        timer.Stop();
+    }
+
+    if (pc == nullptr) {
+        printf("Failed to decode the input file.\n");
+    }
+
+    if (options.output.empty()) {
+        // Save the output model into a ply file.
+        options.output = options.input + ".ply";
+    }
+
+    // Save the decoded geometry into a file.
+    const std::string extension = draco::parser::ToLower(
+        options.output.size() >= 4
+            ? options.output.substr(options.output.size() - 4)
+            : options.output);
+
+    if (extension == ".obj") {
+        draco::ObjEncoder obj_encoder;
+        if (mesh) {
+        if (!obj_encoder.EncodeToFile(*mesh, options.output)) {
+            printf("Failed to store the decoded mesh as OBJ.\n");
+        }
+        } else {
+        if (!obj_encoder.EncodeToFile(*pc, options.output)) {
+            printf("Failed to store the decoded point cloud as OBJ.\n");
+        }
+        }
+    } else if (extension == ".ply") {
+        draco::PlyEncoder ply_encoder;
+        if (mesh) {
+        if (!ply_encoder.EncodeToFile(*mesh, options.output)) {
+            printf("Failed to store the decoded mesh as PLY.\n");
+        }
+        } else {
+        if (!ply_encoder.EncodeToFile(*pc, options.output)) {
+            printf("Failed to store the decoded point cloud as PLY.\n");
+        }
+        }
+    } else {
+        printf("Invalid extension of the output file. Use either .ply or .obj.\n");
+    }
+    printf("Decoded geometry saved to %s (%" PRId64 " ms to decode)\n",
+            options.output.c_str(), timer.GetInMs());
+
+}
+
+void PlyLoader::fileToDraco(const char *path){
     std::string input = getAssetPath() + path;
     std::string output = input + ".drc";
     
@@ -196,6 +297,16 @@ PlyLoader::PlyLoader(const char *path) : _isBigEndian(false), _lower(1e30f), _up
             "For better compression, increase the compression level '-cl' (up to "
             "10).\n\n");
     }
+}
+
+
+PlyLoader::PlyLoader(const char *path) : _isBigEndian(false), _lower(1e30f), _upper(-1e30f) {
+
+    fileToDraco(path);
+    dracoToPly(path);
+
+    std::string output = getAssetPath() + path + ".ply";
+   
     PlyFile *file;
 
     openPly(output.c_str(), file);

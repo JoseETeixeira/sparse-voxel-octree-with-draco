@@ -93,8 +93,14 @@ class PlyLoader {
 
     void buildBlockLists();
 
+    
+
 public:
     PlyLoader(const char *path);
+
+    void fileToDraco(const char *path);
+
+    void dracoToPly(const char *path);
 
     void suggestedDimensions(int sideLength, int &w, int &h, int &d);
 

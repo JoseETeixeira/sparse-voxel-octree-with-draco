@@ -316,16 +316,11 @@ int main(int argc, char *argv[]) {
             tree->save(outputFile.c_str());
         } 
         else {  
-            std::unique_ptr<PlyLoader> loader(new PlyLoader(inputFile.c_str()));
-            loader->convertToVolume("models/temp.voxel", resolution, dataMemory);
-            std::unique_ptr<VoxelData> data(new VoxelData("models/temp.voxel", dataMemory));
-            std::unique_ptr<VoxelOctree> tree(new VoxelOctree(data.get()));
-            tree->save(outputFile.c_str());
-            /*    //generate in memory
+            //generate in memory
             std::unique_ptr<PlyLoader> loader(new PlyLoader(inputFile.c_str()));
             std::unique_ptr<VoxelData> data(new VoxelData(loader.get(), resolution, dataMemory));
             std::unique_ptr<VoxelOctree> tree(new VoxelOctree(data.get()));
-            tree->save(outputFile.c_str());*/
+            tree->save(outputFile.c_str());
         }
         timer.bench("Octree initialization took");
         return 0;
