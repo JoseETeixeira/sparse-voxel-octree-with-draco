@@ -31,7 +31,7 @@ find_package(SDL REQUIRED)
 include_directories(src ${SDL_INCLUDE_DIR})
 find_library(draco src/third-party/draco)
 
-file(GLOB_RECURSE Sources "src/*.hpp" "src/*.cpp" "src/*.c")
+file(GLOB_RECURSE Sources "src/*.hpp" "src/*.cpp" "src/*.c" "src/third-party/happly/*.h")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(Sources ${Sources} "src/SDLMain.m")

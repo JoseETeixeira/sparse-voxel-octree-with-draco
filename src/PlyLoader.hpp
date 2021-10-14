@@ -29,6 +29,10 @@ freely, subject to the following restrictions:
 #include "IntTypes.hpp"
 #include "Timer.hpp"
 
+#include "third-party/draco/src/draco/tools/draco_encoder.hpp"
+#include "third-party/draco/src/draco/tools/draco_decoder.hpp"
+
+
 #include <memory>
 #include <vector>
 
@@ -61,6 +65,8 @@ class PlyLoader {
     std::vector<uint32> _blockOffsets;
     std::unique_ptr<uint32[]> _blockLists;
 
+    draco::Mesh *mesh = nullptr;
+
     Timer _conversionTimer;
     int _processedBlocks;
     int _numNonZeroBlocks;
@@ -85,7 +91,6 @@ class PlyLoader {
     void readVertices(PlyFile *file);
     void rescaleVertices();
     void readTriangles(PlyFile *file);
-
     void pointToGrid(const Vec3 &p, int &x, int &y, int &z);
 
     template<typename LoopBody>

@@ -283,7 +283,7 @@ void printHelp() {
 
 int main(int argc, char *argv[]) {
     
-    unsigned int resolution = 256;  //default resolution
+    unsigned int resolution = 12;  //default resolution
     unsigned int mode = 0;          //default to generate in memory
     std::string inputFile = "";
     std::string outputFile = "";
@@ -317,8 +317,14 @@ int main(int argc, char *argv[]) {
         } 
         else {  
             //generate in memory
-            std::unique_ptr<PlyLoader> loader(new PlyLoader(inputFile.c_str()));
+            /*std::unique_ptr<PlyLoader> loader(new PlyLoader(inputFile.c_str()));
             std::unique_ptr<VoxelData> data(new VoxelData(loader.get(), resolution, dataMemory));
+            std::unique_ptr<VoxelOctree> tree(new VoxelOctree(data.get()));
+            tree->save(outputFile.c_str());*/
+
+            std::unique_ptr<PlyLoader> loader(new PlyLoader(inputFile.c_str()));
+            loader->convertToVolume("models/temp.voxel", resolution, dataMemory);
+            std::unique_ptr<VoxelData> data(new VoxelData("models/temp.voxel", dataMemory));
             std::unique_ptr<VoxelOctree> tree(new VoxelOctree(data.get()));
             tree->save(outputFile.c_str());
         }
