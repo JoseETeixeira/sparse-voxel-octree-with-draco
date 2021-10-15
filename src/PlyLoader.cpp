@@ -771,20 +771,32 @@ void PlyLoader::convertToVolume(const char *path, int maxSize, size_t memoryBudg
     fwrite(&h, 4, 1, fp);
     fwrite(&d, 4, 1, fp);
 
-    for (int z = 0; z < d; z += sliceZ) {
-        try {
-         processBlock(data, 0, 0, z, w, h, sliceZ);
-        }
-        catch(...) {
-        printf("Error %d",z);
-        throw;
-        }
-        
+    for (int z = 0; z < d; z++) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                uint32 val = 0;
+                if (isBlockEmpty(x, y, z))
+                    val = 0xffffffff;
+                else
+                    val = 0x00000000;
 
-        fwrite(data, sizeof(uint32), size_t(w)*size_t(h)*size_t(std::min(sliceZ, d - z)), fp);
+                data[size_t(x) + size_t(y)*size_t(w) + size_t(z)*size_t(w)*size_t(h)] = val;
+            }
+        }
     }
-    fclose(fp);
+
+    for (int z = 0; z < d; z++) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                processBlock(data, x, y, z, w, h, sliceZ);
+            }
+        }
+    }
 
     teardownBlockProcessing();
+
+    fwrite(data, 4, size_t(w)*size_t(h)*size_t(sliceZ), fp);
+
     delete[] data;
+    fclose(fp);
 }
