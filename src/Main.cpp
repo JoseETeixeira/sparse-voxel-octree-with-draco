@@ -283,7 +283,7 @@ void printHelp() {
 
 int main(int argc, char *argv[]) {
     
-    unsigned int resolution = 12;  //default resolution
+    unsigned int resolution = 512;  //default resolution
     unsigned int mode = 0;          //default to generate in memory
     std::string inputFile = "";
     std::string outputFile = "";
