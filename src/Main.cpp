@@ -283,7 +283,7 @@ void printHelp() {
 
 int main(int argc, char *argv[]) {
     
-    unsigned int resolution = 256;  //default resolution
+    unsigned int resolution = 1024;  //default resolution
     unsigned int mode = 0;          //default to generate in memory
     std::string inputFile = "";
     std::string outputFile = "";
@@ -321,6 +321,8 @@ int main(int argc, char *argv[]) {
             std::unique_ptr<VoxelData> data(new VoxelData(loader.get(), resolution, dataMemory));
             std::unique_ptr<VoxelOctree> tree(new VoxelOctree(data.get()));
             tree->save(outputFile.c_str());
+
+            
         }
         timer.bench("Octree initialization took");
         return 0;

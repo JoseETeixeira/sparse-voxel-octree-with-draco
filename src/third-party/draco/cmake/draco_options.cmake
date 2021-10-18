@@ -162,7 +162,9 @@ macro(draco_set_optional_features)
       draco_enable_feature(FEATURE "DRACO_BACKWARDS_COMPATIBILITY_SUPPORTED")
     endif()
 
-
+    draco_enable_feature(FEATURE "DRACO_MESH_COMPRESSION_SUPPORTED")
+    draco_enable_feature(FEATURE "DRACO_NORMAL_ENCODING_SUPPORTED")
+    draco_enable_feature(FEATURE "DRACO_STANDARD_EDGEBREAKER_SUPPORTED")
     if(NOT EMSCRIPTEN)
       # For now, enable deduplication for both encoder and decoder.
       # TODO(ostava): Support for disabling attribute deduplication for the C++

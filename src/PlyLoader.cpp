@@ -30,6 +30,7 @@ freely, subject to the following restrictions:
 #include "thread/ThreadPool.hpp"
 
 #include "third-party/tribox3.h"
+//#include "third-party/happly/happly.h"
 #include "third-party/ply.h"
 
 #include <algorithm>
@@ -39,8 +40,6 @@ freely, subject to the following restrictions:
 #include <memory>
 
 
-#include "third-party/draco/src/draco/tools/draco_encoder.hpp"
-#include "third-party/draco/src/draco/tools/draco_decoder.hpp"
 
 
 Triangle::Triangle(const Vertex &_v1, const Vertex &_v2, const Vertex &_v3) :
@@ -89,6 +88,7 @@ void PlyLoader::dracoToPly(const char *path){
     Options options;
     options.input = input;
     options.output = output;
+    options.use_metadata = true;
     options.is_point_cloud = true;
 
     std::vector<char> data;
@@ -190,11 +190,12 @@ void PlyLoader::fileToDraco(const char *path){
     Options options;
     options.input = input;
     options.output = output;
-    options.is_point_cloud = true;
+    options.is_point_cloud = false;
+    options.use_metadata = true;
     draco::Encoder encoder;
 
     std::unique_ptr<draco::PointCloud> pc;
-    draco::Mesh *mesh = nullptr;
+    
     if (!options.is_point_cloud) {
         auto in_mesh =
             draco::ReadMeshFromFile(input, options.use_metadata);
@@ -218,6 +219,8 @@ void PlyLoader::fileToDraco(const char *path){
         printf("Error: Position attribute cannot be skipped.\n");
 
     }
+
+
 
     // Delete attributes if needed. This needs to happen before we set any
     // quantization settings.
@@ -258,7 +261,7 @@ void PlyLoader::fileToDraco(const char *path){
 
 
     // Convert compression level to speed (that 0 = slowest, 10 = fastest).
-    const int speed = 10 - options.compression_level;
+    const int speed = 10 - 0;
 
     // Setup encoder options.
     if (options.pos_quantization_bits > 0) {
@@ -306,7 +309,9 @@ PlyLoader::PlyLoader(const char *path) : _isBigEndian(false), _lower(1e30f), _up
     dracoToPly(path);
 
     std::string output = getAssetPath() + path + ".ply";
-   
+
+  
+
     PlyFile *file;
 
     openPly(output.c_str(), file);
@@ -315,11 +320,13 @@ PlyLoader::PlyLoader(const char *path) : _isBigEndian(false), _lower(1e30f), _up
     readTriangles(file);
     ply_close(file);
 
+
     std::cout << "Triangle count: " << _tris.size() << ", taking up "
               << prettyPrintMemory(_tris.size()*sizeof(Triangle)) << " of memory" << std::endl;
 
     std::vector<Vertex>().swap(_verts); /* Get rid of vertex data */
 }
+
 
 void PlyLoader::openPly(const char *path, PlyFile *&file) {
     int elemCount, fileType;
@@ -343,7 +350,6 @@ void PlyLoader::openPly(const char *path, PlyFile *&file) {
 
     ASSERT(hasVerts && hasTris, "PLY file has to have triangles and vertices\n");
 }
-
 template<typename T>
 T toHostOrder(T src, bool isBigEndian)
 {
@@ -466,6 +472,7 @@ void PlyLoader::readTriangles(PlyFile *file) {
     }
 }
 
+
 void PlyLoader::pointToGrid(const Vec3 &p, int &x, int &y, int &z)
 {
     x = (int)(p.x*(_sideLength - 2) + 1.0f);
@@ -516,7 +523,7 @@ void PlyLoader::buildBlockLists()
 {
     _blockOffsets.resize(_gridW*_gridH*_gridD + 1, 0);
 
-    for (size_t i = 0; i < _tris.size(); ++i)
+for (size_t i = 0; i < _tris.size(); ++i)
         iterateOverlappingBlocks(_tris[i], [&](size_t idx) { _blockOffsets[1 + idx]++; });
 
     for (size_t i = 1; i < _blockOffsets.size(); ++i)
@@ -529,7 +536,7 @@ void PlyLoader::buildBlockLists()
 
     for (int i = int(_blockOffsets.size() - 1); i >= 1; --i)
         _blockOffsets[i] = _blockOffsets[i - 1];
-    _blockOffsets[0] = 0;
+    _blockOffsets[0] = 0;   
 
     std::cout << "PlyLoader block lists take up an additional "
               << prettyPrintMemory((_blockOffsets.size() + _blockOffsets.back())*sizeof(uint32))
@@ -765,13 +772,32 @@ void PlyLoader::convertToVolume(const char *path, int maxSize, size_t memoryBudg
     fwrite(&h, 4, 1, fp);
     fwrite(&d, 4, 1, fp);
 
-    for (int z = 0; z < d; z += sliceZ) {
-        processBlock(data, 0, 0, z, w, h, sliceZ);
+    for (int z = 0; z < d; z++) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                uint32 val = 0;
+                if (isBlockEmpty(x, y, z))
+                    val = 0xffffffff;
+                else
+                    val = 0x00000000;
 
-        fwrite(data, sizeof(uint32), size_t(w)*size_t(h)*size_t(std::min(sliceZ, d - z)), fp);
+                data[size_t(x) + size_t(y)*size_t(w) + size_t(z)*size_t(w)*size_t(h)] = val;
+            }
+        }
     }
-    fclose(fp);
+
+    for (int z = 0; z < d; z++) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                processBlock(data, x, y, z, w, h, sliceZ);
+            }
+        }
+    }
 
     teardownBlockProcessing();
+
+    fwrite(data, 4, size_t(w)*size_t(h)*size_t(sliceZ), fp);
+
     delete[] data;
+    fclose(fp);
 }
