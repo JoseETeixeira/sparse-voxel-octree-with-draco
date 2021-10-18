@@ -29,7 +29,9 @@ endif()
 find_package(SDL REQUIRED)
 
 include_directories(src ${SDL_INCLUDE_DIR})
-find_library(draco src/third-party/draco)
+add_subdirectory(src/third-party/draco
+                 ${CMAKE_BINARY_DIR}/draco_build)
+include_directories("${CMAKE_BINARY_DIR}" src/third-party/draco)
 
 file(GLOB_RECURSE Sources "src/*.hpp" "src/*.cpp" "src/*.c" "src/third-party/happly/*.h")
 

@@ -88,6 +88,7 @@ void PlyLoader::dracoToPly(const char *path){
     Options options;
     options.input = input;
     options.output = output;
+    options.use_metadata = true;
     options.is_point_cloud = true;
 
     std::vector<char> data;
