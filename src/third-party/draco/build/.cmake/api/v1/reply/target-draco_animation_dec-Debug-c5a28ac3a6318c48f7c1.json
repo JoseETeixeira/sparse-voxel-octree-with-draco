@@ -1,0 +1,150 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "CMakeFiles/draco_animation_dec.dir/src/draco/animation/keyframe_animation_decoder.cc.o"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"draco_add_library",
+			"target_compile_definitions",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"cmake/draco_targets.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 756,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 275,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 288,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 292,
+				"parent" : 1
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g  "
+				},
+				{
+					"fragment" : "-std=gnu++11"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "DRACO_CMAKE=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "DRACO_FLAGS_SRCDIR=\"/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco\""
+				},
+				{
+					"backtrace" : 3,
+					"define" : "DRACO_FLAGS_TMPDIR=\"/tmp\""
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_FILE_OFFSET_BITS=64"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_LARGEFILE_SOURCE"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco/build"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"id" : "draco_animation_dec::@6890427a1f51a3e7e1df",
+	"name" : "draco_animation_dec",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "src/draco/animation/keyframe_animation_decoder.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/animation/keyframe_animation_decoder.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "OBJECT_LIBRARY"
+}

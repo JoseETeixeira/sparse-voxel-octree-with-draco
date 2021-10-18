@@ -1,0 +1,191 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "CMakeFiles/draco_points_dec.dir/src/draco/compression/point_cloud/algorithms/dynamic_integer_points_kd_tree_decoder.cc.o"
+		},
+		{
+			"path" : "CMakeFiles/draco_points_dec.dir/src/draco/compression/point_cloud/algorithms/float_points_tree_decoder.cc.o"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"draco_add_library",
+			"target_compile_definitions",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"cmake/draco_targets.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 768,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 275,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 288,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 292,
+				"parent" : 1
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g  "
+				},
+				{
+					"fragment" : "-std=gnu++11"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "DRACO_CMAKE=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "DRACO_FLAGS_SRCDIR=\"/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco\""
+				},
+				{
+					"backtrace" : 3,
+					"define" : "DRACO_FLAGS_TMPDIR=\"/tmp\""
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_FILE_OFFSET_BITS=64"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_LARGEFILE_SOURCE"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/media/eduardo/29F419E21696543C/Projects/Pessoal/sparse-voxel-octrees/src/third-party/draco/build"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				4,
+				6
+			]
+		}
+	],
+	"id" : "draco_points_dec::@6890427a1f51a3e7e1df",
+	"name" : "draco_points_dec",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				5,
+				7
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				4,
+				6
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/compression/point_cloud/algorithms/point_cloud_compression_method.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/compression/point_cloud/algorithms/point_cloud_types.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/compression/point_cloud/algorithms/quantize_points_3.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/compression/point_cloud/algorithms/queuing_policy.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "src/draco/compression/point_cloud/algorithms/dynamic_integer_points_kd_tree_decoder.cc",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/compression/point_cloud/algorithms/dynamic_integer_points_kd_tree_decoder.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "src/draco/compression/point_cloud/algorithms/float_points_tree_decoder.cc",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/draco/compression/point_cloud/algorithms/float_points_tree_decoder.h",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "OBJECT_LIBRARY"
+}
